@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Taylor Dynasty Systems — HEXAGEN-60 Protocol</title>
+  <meta name="description" content="The ID system your distributed infrastructure deserves. HEXAGEN-60: hierarchical, typed, time-ordered, self-validating. 11 characters. Deploy today." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:    #0A0A0A;
+      --dark:     #111111;
+      --card:     #141414;
+      --border:   #222222;
+      --gold:     #C9A84C;
+      --gold-dim: #8A6E2F;
+      --cream:    #F5F0E8;
+      --muted:    #888888;
+      --white:    #FFFFFF;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--black);
+      color: var(--cream);
+      font-family: 'Inter', sans-serif;
+      font-weight: 400;
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ── NAV ── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 72px;
+      background: rgba(10,10,10,0.92);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-logo {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      text-decoration: none;
+    }
+
+    .nav-logo-primary {
+      font-family: 'Playfair Display', serif;
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--cream);
+      letter-spacing: 0.04em;
+    }
+
+    .nav-logo-secondary {
+      font-size: 9px;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.04em;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover { color: var(--cream); }
+
+    .nav-cta {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--gold) !important;
+      border: 1px solid var(--gold-dim);
+      padding: 8px 20px;
+      border-radius: 2px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      transition: background 0.2s, color 0.2s !important;
+    }
+
+    .nav-cta:hover {
+      background: var(--gold) !important;
+      color: var(--black) !important;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 120px 48px 80px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background:
+        radial-gradient(ellipse 60% 50% at 70% 40%, rgba(201,168,76,0.06) 0%, transparent 70%),
+        radial-gradient(ellipse 40% 60% at 20% 80%, rgba(201,168,76,0.03) 0%, transparent 60%);
+      pointer-events: none;
+    }
+
+    .hero-eyebrow {
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--gold);
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 32px;
+      height: 1px;
+      background: var(--gold-dim);
+    }
+
+    .hero-headline {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(42px, 6vw, 88px);
+      font-weight: 700;
+      line-height: 1.05;
+      color: var(--cream);
+      max-width: 800px;
+      margin-bottom: 28px;
+      letter-spacing: -0.02em;
+    }
+
+    .hero-headline em {
+      font-style: italic;
+      color: var(--gold);
+    }
+
+    .hero-subhead {
+      font-size: clamp(15px, 1.8vw, 18px);
+      font-weight: 300;
+      color: var(--muted);
+      max-width: 520px;
+      line-height: 1.75;
+      margin-bottom: 48px;
+    }
+
+    .hero-actions {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--black);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      padding: 16px 36px;
+      border-radius: 2px;
+      text-decoration: none;
+      transition: background 0.2s, transform 0.15s;
+    }
+
+    .btn-primary:hover {
+      background: #DFC06A;
+      transform: translateY(-1px);
+    }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      color: var(--cream);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      text-decoration: none;
+      opacity: 0.7;
+      transition: opacity 0.2s;
+    }
+
+    .btn-ghost:hover { opacity: 1; }
+
+    .btn-ghost svg { transition: transform 0.2s; }
+    .btn-ghost:hover svg { transform: translateX(3px); }
+
+    /* ── PROOF STRIP ── */
+    .proof-strip {
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      padding: 64px 48px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 48px;
+    }
+
+    .proof-item {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      padding-right: 48px;
+      border-right: 1px solid var(--border);
+    }
+
+    .proof-item:last-child {
+      border-right: none;
+      padding-right: 0;
+    }
+
+    .proof-number {
+      font-family: 'Playfair Display', serif;
+      font-size: 48px;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1;
+      letter-spacing: -0.03em;
+    }
+
+    .proof-label {
+      font-size: 15px;
+      font-weight: 600;
+      color: var(--cream);
+      letter-spacing: 0.01em;
+    }
+
+    .proof-detail {
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.65;
+    }
+
+    /* ── CODE BLOCK ── */
+    .code-section {
+      padding: 80px 48px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 80px;
+      align-items: center;
+    }
+
+    .code-copy {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .section-tag {
+      font-size: 10px;
+      font-weight: 600;
+      color: var(--gold);
+      letter-spacing: 0.24em;
+      text-transform: uppercase;
+    }
+
+    .section-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(28px, 3.5vw, 44px);
+      font-weight: 600;
+      line-height: 1.15;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+    }
+
+    .section-body {
+      font-size: 15px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    .code-block {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .code-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .code-dots {
+      display: flex;
+      gap: 6px;
+    }
+
+    .code-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+    }
+
+    .dot-red    { background: #FF5F57; }
+    .dot-yellow { background: #FEBC2E; }
+    .dot-green  { background: #28C840; }
+
+    .code-filename {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+    }
+
+    .code-body {
+      padding: 24px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      line-height: 1.8;
+      overflow-x: auto;
+    }
+
+    .c-keyword  { color: #C792EA; }
+    .c-import   { color: #82AAFF; }
+    .c-string   { color: #C3E88D; }
+    .c-comment  { color: #546E7A; }
+    .c-function { color: #82AAFF; }
+    .c-type     { color: #FFCB6B; }
+    .c-value    { color: #F78C6C; }
+    .c-output   { color: var(--gold); }
+
+    /* ── ARCHITECTURE ── */
+    .arch-section {
+      padding: 80px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .arch-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 560px;
+      margin-bottom: 56px;
+    }
+
+    .id-diagram {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 4px;
+      padding: 40px 48px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      overflow-x: auto;
+    }
+
+    .id-structure {
+      display: flex;
+      gap: 0;
+      font-size: 20px;
+      letter-spacing: 0.05em;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+    }
+
+    .id-chunk {
+      padding: 10px 16px;
+      border: 1px solid var(--border);
+    }
+
+    .id-chunk:first-child { border-radius: 4px 0 0 4px; }
+    .id-chunk:last-child  { border-radius: 0 4px 4px 0; }
+
+    .id-type     { background: rgba(201,168,76,0.12); color: var(--gold); }
+    .id-era      { background: rgba(130,170,255,0.08); color: #82AAFF; }
+    .id-period   { background: rgba(195,232,141,0.08); color: #C3E88D; }
+    .id-sequence { background: rgba(247,140,108,0.08); color: #F78C6C; }
+    .id-check    { background: rgba(199,146,234,0.08); color: #C792EA; }
+
+    .id-labels {
+      display: flex;
+      gap: 0;
+      font-size: 10px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      flex-wrap: wrap;
+    }
+
+    .id-label {
+      padding: 6px 16px;
+      color: var(--muted);
+      flex: 1;
+      min-width: 60px;
+    }
+
+    /* ── COMPARISON TABLE ── */
+    .compare-section {
+      padding: 80px 48px;
+      border-top: 1px solid var(--border);
+    }
+
+    .compare-header {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      max-width: 560px;
+      margin-bottom: 48px;
+    }
+
+    .compare-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 14px;
+    }
+
+    .compare-table th {
+      text-align: left;
+      padding: 14px 20px;
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .compare-table th:not(:first-child) { text-align: center; }
+
+    .compare-table td {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(34,34,34,0.5);
+      color: var(--cream);
+    }
+
+    .compare-table td:not(:first-child) { text-align: center; }
+
+    .compare-table tr.highlight-row td {
+      background: rgba(201,168,76,0.04);
+    }
+
+    .compare-table td:first-child { color: var(--muted); }
+
+    .compare-table tr.highlight-row td:first-child {
+      color: var(--gold);
+      font-weight: 600;
+    }
+
+    .tick { color: #28C840; font-size: 16px; }
+    .cross { color: #FF5F57; font-size: 16px; opacity: 0.6; }
+
+    /* ── FINAL CTA ── */
+    .final-cta {
+      padding: 120px 48px;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta::before {
+      content: '';
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(201,168,76,0.05) 0%, transparent 70%);
+      pointer-events: none;
+    }
+
+    .final-cta .hero-eyebrow {
+      justify-content: center;
+    }
+
+    .final-cta .hero-eyebrow::before { display: none; }
+
+    .final-cta-heading {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(32px, 4.5vw, 60px);
+      font-weight: 700;
+      line-height: 1.1;
+      color: var(--cream);
+      letter-spacing: -0.02em;
+      max-width: 680px;
+      margin: 0 auto 20px;
+    }
+
+    .final-cta-sub {
+      font-size: 16px;
+      color: var(--muted);
+      margin-bottom: 48px;
+    }
+
+    .final-actions {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .install-cmd {
+      display: inline-flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--card);
+      border: 1px solid var(--border);
+      padding: 14px 24px;
+      border-radius: 2px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 14px;
+      color: var(--cream);
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .install-cmd:hover { border-color: var(--gold-dim); }
+
+    .install-cmd .prompt { color: var(--gold); }
+
+    /* ── FOOTER ── */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 20px;
+    }
+
+    .footer-left {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .footer-brand {
+      font-family: 'Playfair Display', serif;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--cream);
+    }
+
+    .footer-sub {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.06em;
+    }
+
+    .footer-links {
+      display: flex;
+      gap: 32px;
+    }
+
+    .footer-links a {
+      font-size: 12px;
+      color: var(--muted);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-links a:hover { color: var(--cream); }
+
+    .footer-right {
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.04em;
+    }
+
+    /* ── RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { gap: 24px; }
+
+      .hero { padding: 100px 24px 60px; }
+      .proof-strip { padding: 48px 24px; grid-template-columns: 1fr; gap: 32px; }
+      .proof-item { border-right: none; border-bottom: 1px solid var(--border); padding-right: 0; padding-bottom: 32px; }
+      .proof-item:last-child { border-bottom: none; padding-bottom: 0; }
+
+      .code-section { padding: 60px 24px; grid-template-columns: 1fr; gap: 40px; }
+      .arch-section { padding: 60px 24px; }
+      .compare-section { padding: 60px 24px; }
+      .final-cta { padding: 80px 24px; }
+      footer { padding: 32px 24px; }
+
+      .id-structure { font-size: 15px; }
+    }
+
+    @media (max-width: 640px) {
+      nav .nav-links { display: none; }
+      .hero-headline { font-size: 36px; }
+      .id-diagram { padding: 24px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ── NAV ── -->
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-primary">Taylor Dynasty Systems</span>
+    <span class="nav-logo-secondary">A Taylor Dynasty Holding Company</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/portfolio">Portfolio</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/intelligence">Intelligence</a></li>
+    <li><a href="/acquire" class="nav-cta">Request Access</a></li>
+  </ul>
+</nav>
+
+<!-- ── HERO ── -->
+<section class="hero">
+  <p class="hero-eyebrow">HEXAGEN-60 Protocol — v1.0.0</p>
+
+  <h1 class="hero-headline">
+    The ID system your<br />
+    infrastructure <em>deserves.</em>
+  </h1>
+
+  <p class="hero-subhead">
+    For engineers and architects building distributed systems at scale —
+    who refuse to ship with primitive identifiers.
+  </p>
+
+  <div class="hero-actions">
+    <a href="/acquire" class="btn-primary">
+      Deploy in 60 Seconds
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+    <a href="#protocol" class="btn-ghost">
+      View the Protocol
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- ── PROOF STRIP ── -->
+<section class="proof-strip">
+  <div class="proof-item">
+    <div class="proof-number">67%</div>
+    <div class="proof-label">Smaller than UUID</div>
+    <div class="proof-detail">
+      11 characters versus UUID's 36. Same global uniqueness guarantee.
+      No storage bloat, no index overhead. Zero compromise.
+    </div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-number">4×</div>
+    <div class="proof-label">More capable by design</div>
+    <div class="proof-detail">
+      Hierarchical, typed, time-ordered, and self-validating — in a single
+      11-character string. UUID does none of this. KSUID and ULID do one or two.
+    </div>
+  </div>
+  <div class="proof-item">
+    <div class="proof-number">12.96M</div>
+    <div class="proof-label">Unique IDs per second</div>
+    <div class="proof-detail">
+      Thread-safe. MIT licensed. Luhn-60 error detection built in.
+      Production-ready the moment it's in your hands.
+    </div>
+  </div>
+</section>
+
+<!-- ── CODE SECTION ── -->
+<section class="code-section" id="protocol">
+  <div class="code-copy">
+    <p class="section-tag">Quick Start</p>
+    <h2 class="section-heading">Running in three lines. Inspectable by design.</h2>
+    <p class="section-body">
+      Every HEXAGEN-60 ID carries its own metadata — type, timestamp, sequence, and
+      checksum — readable without a database lookup. No external state required.
+    </p>
+  </div>
+
+  <div class="code-block">
+    <div class="code-header">
+      <div class="code-dots">
+        <div class="code-dot dot-red"></div>
+        <div class="code-dot dot-yellow"></div>
+        <div class="code-dot dot-green"></div>
+      </div>
+      <span class="code-filename">quickstart.py</span>
+    </div>
+    <div class="code-body">
+<span class="c-keyword">import</span> <span class="c-import">uni60</span>
+<span class="c-keyword">from</span> <span class="c-import">uni60</span> <span class="c-keyword">import</span> <span class="c-type">generate</span>, <span class="c-type">inspect</span>, <span class="c-type">TypePrefix</span>
+<br />
+<span class="c-comment"># Generate typed, production-grade IDs</span>
+user_id  = <span class="c-function">generate</span>(<span class="c-type">TypePrefix</span>.USER)
+event_id = <span class="c-function">generate</span>(<span class="c-type">TypePrefix</span>.EVENT)
+asset_id = <span class="c-function">generate</span>(<span class="c-type">TypePrefix</span>.ASSET)
+<br />
+<span class="c-comment"># Decode any ID — no database required</span>
+info = <span class="c-function">inspect</span>(user_id)
+<span class="c-function">print</span>(info.type_name)       <span class="c-comment"># <span class="c-output">'USER'</span></span>
+<span class="c-function">print</span>(info.era)             <span class="c-comment"># <span class="c-output">730</span>  (days since epoch)</span>
+<span class="c-function">print</span>(info.period)          <span class="c-comment"># <span class="c-output">43200</span> (seconds into today)</span>
+<span class="c-function">print</span>(info.checksum_valid)  <span class="c-comment"># <span class="c-output">True</span></span>
+<br />
+<span class="c-comment"># Raw Base-60 encoding</span>
+uni60.<span class="c-function">encode</span>(<span class="c-value">3600</span>)   <span class="c-comment"># <span class="c-output">'100'</span></span>
+uni60.<span class="c-function">decode</span>(<span class="c-string">'100'</span>)  <span class="c-comment"># <span class="c-output">3600</span></span>
+    </div>
+  </div>
+</section>
+
+<!-- ── ARCHITECTURE ── -->
+<section class="arch-section">
+  <div class="arch-header">
+    <p class="section-tag">Protocol Architecture</p>
+    <h2 class="section-heading">Every character earns its place.</h2>
+    <p class="section-body">
+      HEXAGEN-60 encodes type, time, sequence, and integrity into an 11-character string.
+      Inspect it anywhere. Trust it everywhere.
+    </p>
+  </div>
+
+  <div class="id-diagram">
+    <div class="id-structure">
+      <div class="id-chunk id-type"></div>
+      <div class="id-chunk id-era">B4</div>
+      <div class="id-chunk id-period">xq7</div>
+      <div class="id-chunk id-sequence">m09C</div>
+      <div class="id-chunk id-check">★</div>
+    </div>
+    <div class="id-labels">
+      <div class="id-label">TYPE<br /><span style="color:var(--gold);font-size:10px">Unicode PUA</span></div>
+      <div class="id-label">ERA<br /><span style="color:#82AAFF;font-size:10px">Days since epoch</span></div>
+      <div class="id-label">PERIOD<br /><span style="color:#C3E88D;font-size:10px">Seconds in day</span></div>
+      <div class="id-label">SEQUENCE<br /><span style="color:#F78C6C;font-size:10px">12.96M / sec</span></div>
+      <div class="id-label">CHECK<br /><span style="color:#C792EA;font-size:10px">Luhn-60</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- ── COMPARISON TABLE ── -->
+<section class="compare-section">
+  <div class="compare-header">
+    <p class="section-tag">Competitive Positioning</p>
+    <h2 class="section-heading">The only ID system that does all five.</h2>
+  </div>
+
+  <table class="compare-table">
+    <thead>
+      <tr>
+        <th>System</th>
+        <th>Characters</th>
+        <th>Globally Unique</th>
+        <th>Hierarchical</th>
+        <th>Typed</th>
+        <th>Time-Ordered</th>
+        <th>Checksum</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>UUID v4</td>
+        <td>36</td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+      </tr>
+      <tr>
+        <td>ULID</td>
+        <td>26</td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="cross">✕</span></td>
+      </tr>
+      <tr>
+        <td>KSUID</td>
+        <td>27</td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="cross">✕</span></td>
+      </tr>
+      <tr>
+        <td>Base64 ID</td>
+        <td>11</td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+        <td><span class="cross">✕</span></td>
+      </tr>
+      <tr class="highlight-row">
+        <td>HEXAGEN-60</td>
+        <td style="color:var(--gold);font-weight:600">11</td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="tick">✓</span></td>
+        <td><span class="tick">✓</span></td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- ── FINAL CTA ── -->
+<section class="final-cta">
+  <p class="hero-eyebrow">Ready to deploy</p>
+  <h2 class="final-cta-heading">
+    Stop shipping primitive identifiers.
+  </h2>
+  <p class="final-cta-sub">
+    One pip install. Production-ready in 60 seconds.
+  </p>
+  <div class="final-actions">
+    <div class="install-cmd">
+      <span class="prompt">$</span>
+      pip install uni60
+    </div>
+    <a href="/acquire" class="btn-primary">
+      Request Enterprise Access
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
+        <path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </a>
+  </div>
+</section>
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-left">
+    <span class="footer-brand">Taylor Dynasty Systems</span>
+    <span class="footer-sub">A Taylor Dynasty Holding Company — MIT License</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/taytaylor70/uni60">GitHub</a>
+    <a href="/intelligence">Intelligence</a>
+    <a href="/acquire">Acquire</a>
+    <a href="/about">About</a>
+  </div>
+  <span class="footer-right">© 2026 Taylor Dynasty Systems</span>
+</footer>
+
+</body>
+</html>
