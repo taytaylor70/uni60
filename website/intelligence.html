@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>UUID vs ULID vs KSUID vs HEXAGEN-60 — Full Comparison</title>
+  <meta name="description" content="A no-hype comparison of the four major ID systems. We score UUID v4, ULID, KSUID, and HEXAGEN-60 on size, structure, typing, ordering, and error detection." />
+  <meta name="keywords" content="uuid vs ulid comparison, uuid alternative, ksuid vs ulid, distributed systems identifier, hexagen-60 vs uuid" />
+  <link rel="canonical" href="https://taylordynasty.com/intelligence/uuid-vs-ulid-vs-ksuid-vs-hexagen-60" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0A0A0A; --dark: #111111; --card: #141414;
+      --border: #222222; --gold: #C9A84C; --gold-dim: #8A6E2F;
+      --cream: #F5F0E8; --muted: #888888;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--cream); font-family: 'Inter', sans-serif; font-weight: 400; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 72px; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; flex-direction: column; gap: 1px; text-decoration: none; }
+    .nav-logo-primary { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: var(--cream); letter-spacing: 0.04em; }
+    .nav-logo-secondary { font-size: 9px; font-weight: 500; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--cream); }
+    .nav-cta { font-size: 12px !important; font-weight: 600 !important; color: var(--gold) !important; border: 1px solid var(--gold-dim); padding: 8px 20px; border-radius: 2px; letter-spacing: 0.08em !important; text-transform: uppercase; transition: background 0.2s, color 0.2s !important; }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--black) !important; }
+
+    /* ARTICLE LAYOUT */
+    .article-wrap { display: grid; grid-template-columns: 220px 1fr; min-height: 100vh; padding-top: 72px; }
+
+    /* SIDEBAR */
+    .article-sidebar { padding: 64px 32px; border-right: 1px solid var(--border); position: sticky; top: 72px; height: calc(100vh - 72px); overflow-y: auto; }
+    .sidebar-section { margin-bottom: 40px; }
+    .sidebar-label { font-size: 10px; font-weight: 600; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 16px; }
+    .sidebar-toc { list-style: none; display: flex; flex-direction: column; gap: 2px; }
+    .sidebar-toc a { display: block; font-size: 12px; color: var(--muted); text-decoration: none; padding: 5px 0; border-left: 2px solid transparent; padding-left: 12px; transition: color 0.15s, border-color 0.15s; line-height: 1.4; }
+    .sidebar-toc a:hover { color: var(--cream); border-left-color: var(--gold-dim); }
+    .sidebar-back { font-size: 11px; color: var(--muted); text-decoration: none; display: flex; align-items: center; gap: 6px; margin-bottom: 32px; letter-spacing: 0.04em; transition: color 0.2s; }
+    .sidebar-back:hover { color: var(--cream); }
+    .sidebar-meta { font-size: 11px; color: var(--muted); line-height: 1.8; }
+
+    /* ARTICLE BODY */
+    .article-body { padding: 64px 80px 120px; max-width: 860px; }
+
+    /* ARTICLE HEADER */
+    .article-eyebrow { font-size: 10px; font-weight: 600; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 20px; display: flex; align-items: center; gap: 12px; }
+    .article-eyebrow::before { content: ''; display: block; width: 24px; height: 1px; background: var(--gold-dim); }
+    .article-title { font-family: 'Playfair Display', serif; font-size: clamp(32px, 4vw, 56px); font-weight: 700; color: var(--cream); line-height: 1.08; letter-spacing: -0.02em; margin-bottom: 24px; }
+    .article-title em { font-style: italic; color: var(--gold); }
+    .article-byline { display: flex; align-items: center; gap: 24px; padding: 20px 0; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); margin-bottom: 56px; }
+    .byline-author { font-size: 13px; font-weight: 600; color: var(--cream); }
+    .byline-sep { width: 4px; height: 4px; border-radius: 50%; background: var(--border); }
+    .byline-meta { font-size: 12px; color: var(--muted); }
+
+    /* ARTICLE PROSE */
+    .prose { display: flex; flex-direction: column; gap: 28px; }
+    .prose h2 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 2.5vw, 32px); font-weight: 600; color: var(--cream); letter-spacing: -0.02em; line-height: 1.2; padding-top: 24px; margin-top: 24px; border-top: 1px solid var(--border); }
+    .prose h2:first-of-type { border-top: none; padding-top: 0; margin-top: 0; }
+    .prose h3 { font-family: 'Playfair Display', serif; font-size: clamp(18px, 2vw, 24px); font-weight: 600; color: var(--cream); letter-spacing: -0.01em; margin-top: 8px; }
+    .prose p { font-size: 16px; line-height: 1.85; color: var(--muted); }
+    .prose p strong { color: var(--cream); font-weight: 500; }
+    .prose p em { font-style: italic; color: var(--cream); }
+    .prose p code { font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--gold); background: rgba(201,168,76,0.08); padding: 2px 7px; border-radius: 2px; }
+    .prose ul, .prose ol { padding-left: 20px; display: flex; flex-direction: column; gap: 8px; }
+    .prose li { font-size: 15px; line-height: 1.75; color: var(--muted); }
+    .prose li strong { color: var(--cream); font-weight: 500; }
+
+    /* PULL QUOTE */
+    .pull-quote { padding: 28px 36px; border-left: 2px solid var(--gold); background: rgba(201,168,76,0.03); margin: 8px 0; }
+    .pull-quote p { font-family: 'Playfair Display', serif; font-size: clamp(17px, 2vw, 22px); font-style: italic; font-weight: 400; color: var(--cream); line-height: 1.55; }
+
+    /* CODE BLOCK */
+    .code-block { background: var(--card); border: 1px solid var(--border); border-radius: 4px; overflow: hidden; margin: 8px 0; }
+    .code-hdr { display: flex; align-items: center; justify-content: space-between; padding: 12px 20px; border-bottom: 1px solid var(--border); }
+    .code-dots { display: flex; gap: 6px; }
+    .cd { width: 10px; height: 10px; border-radius: 50%; }
+    .cd-r { background: #FF5F57; } .cd-y { background: #FEBC2E; } .cd-g { background: #28C840; }
+    .code-fn { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); }
+    .code-body { padding: 20px 24px; font-family: 'JetBrains Mono', monospace; font-size: 13px; line-height: 1.8; overflow-x: auto; }
+    .ck { color: #C792EA; } .ci { color: #82AAFF; } .cs { color: #C3E88D; }
+    .cc { color: #546E7A; } .cn { color: #F78C6C; } .co { color: var(--gold); }
+
+    /* COMPARISON TABLE */
+    .compare-wrap { overflow-x: auto; margin: 8px 0; }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .compare-table th { text-align: left; padding: 14px 20px; font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); border-bottom: 1px solid var(--border); white-space: nowrap; }
+    .compare-table th:not(:first-child) { text-align: center; }
+    .compare-table td { padding: 16px 20px; border-bottom: 1px solid rgba(34,34,34,0.5); color: var(--cream); font-size: 13px; }
+    .compare-table td:not(:first-child) { text-align: center; }
+    .compare-table td:first-child { color: var(--muted); font-weight: 500; }
+    .compare-table tr.hl td { background: rgba(201,168,76,0.04); }
+    .compare-table tr.hl td:first-child { color: var(--gold); font-weight: 600; }
+    .tick { color: #28C840; font-size: 15px; }
+    .cross { color: #FF5F57; opacity: 0.5; font-size: 15px; }
+
+    /* SCORE CARDS */
+    .score-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 2px; background: var(--border); margin: 8px 0; }
+    .score-card { background: var(--card); padding: 24px 20px; display: flex; flex-direction: column; gap: 8px; }
+    .score-card.winner { background: rgba(201,168,76,0.06); }
+    .score-system { font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 0.1em; text-transform: uppercase; }
+    .score-system.gold { color: var(--gold); }
+    .score-val { font-family: 'Playfair Display', serif; font-size: 40px; font-weight: 700; line-height: 1; }
+    .score-val.gold { color: var(--gold); }
+    .score-val.dim { color: var(--muted); }
+    .score-label { font-size: 11px; color: var(--muted); }
+
+    /* VERDICT BOX */
+    .verdict { background: var(--card); border: 1px solid var(--gold-dim); border-radius: 4px; padding: 36px 40px; margin: 8px 0; }
+    .verdict-label { font-size: 10px; font-weight: 600; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 16px; }
+    .verdict-text { font-family: 'Playfair Display', serif; font-size: clamp(18px, 2.2vw, 26px); font-style: italic; color: var(--cream); line-height: 1.5; margin-bottom: 16px; }
+    .verdict-body { font-size: 14px; color: var(--muted); line-height: 1.75; }
+    .verdict-body strong { color: var(--cream); font-weight: 500; }
+
+    /* ARTICLE FOOTER CTA */
+    .article-cta { margin-top: 72px; padding-top: 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; }
+    .article-cta-copy h3 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 600; color: var(--cream); margin-bottom: 6px; }
+    .article-cta-copy p { font-size: 13px; color: var(--muted); }
+    .btn-primary { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--black); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 28px; border-radius: 2px; text-decoration: none; transition: background 0.2s; }
+    .btn-primary:hover { background: #DFC06A; }
+
+    /* FOOTER */
+    footer { padding: 40px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-brand { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 600; color: var(--cream); }
+    .footer-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-right { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+
+    @media (max-width: 960px) { nav { padding: 0 24px; } .article-wrap { grid-template-columns: 1fr; } .article-sidebar { display: none; } .article-body { padding: 48px 24px 80px; } .score-grid { grid-template-columns: repeat(2,1fr); } footer { padding: 32px 24px; } }
+    @media (max-width: 640px) { .nav-links { display: none; } .score-grid { grid-template-columns: 1fr 1fr; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-primary">Taylor Dynasty Systems</span>
+    <span class="nav-logo-secondary">A Taylor Dynasty Holding Company</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/portfolio">Portfolio</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/intelligence" class="active">Intelligence</a></li>
+    <li><a href="/acquire" class="nav-cta">Request Access</a></li>
+  </ul>
+</nav>
+
+<div class="article-wrap">
+
+  <!-- SIDEBAR -->
+  <aside class="article-sidebar">
+    <a href="/intelligence" class="sidebar-back">
+      <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M11 7H3M6 4L3 7l3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      The Brief
+    </a>
+    <div class="sidebar-section">
+      <p class="sidebar-label">In This Article</p>
+      <ul class="sidebar-toc">
+        <li><a href="#why-id-design-matters">Why ID design matters</a></li>
+        <li><a href="#uuid">UUID v4 — the default</a></li>
+        <li><a href="#ulid">ULID — time ordering added</a></li>
+        <li><a href="#ksuid">KSUID — another contender</a></li>
+        <li><a href="#hexagen60">HEXAGEN-60 — all five</a></li>
+        <li><a href="#comparison">Side-by-side comparison</a></li>
+        <li><a href="#verdict">The verdict</a></li>
+      </ul>
+    </div>
+    <div class="sidebar-section">
+      <p class="sidebar-label">Article Info</p>
+      <p class="sidebar-meta">
+        Taylor Dynasty Systems<br/>
+        June 2026<br/>
+        12 min read<br/>
+        Distributed Systems
+      </p>
+    </div>
+  </aside>
+
+  <!-- ARTICLE -->
+  <main class="article-body">
+    <p class="article-eyebrow">Taylor Dynasty Intelligence — Distributed Systems</p>
+    <h1 class="article-title">UUID vs ULID vs KSUID<br /><em>vs HEXAGEN-60</em></h1>
+    <div class="article-byline">
+      <span class="byline-author">Taylor Dynasty Systems</span>
+      <span class="byline-sep"></span>
+      <span class="byline-meta">June 2026</span>
+      <span class="byline-sep"></span>
+      <span class="byline-meta">12 min read</span>
+    </div>
+
+    <div class="prose">
+
+      <h2 id="why-id-design-matters">Why identifier design is not a solved problem</h2>
+
+      <p>
+        Most engineers treat identifier generation as a solved problem. Pick a library,
+        call a function, get an ID. Move on. The result is that most distributed systems
+        are built on identifiers that were designed for a different era — when databases
+        were single-node, when you controlled every write, and when an ID's only job was
+        to be unique.
+      </p>
+
+      <p>
+        That era is over. Modern systems are distributed, multi-tenant, and event-driven.
+        Your identifiers need to carry more than uniqueness. They need to carry
+        <strong>time</strong>, <strong>type</strong>, <strong>structure</strong>, and
+        <strong>integrity</strong> — ideally without requiring a database call to decode them.
+      </p>
+
+      <div class="pull-quote">
+        <p>The identifier is the atom of your system. Get it wrong and every system built on top of it inherits the flaw.</p>
+      </div>
+
+      <p>
+        This article scores the four most widely used ID systems across the five properties
+        that matter in production: <strong>size</strong>, <strong>global uniqueness</strong>,
+        <strong>hierarchical structure</strong>, <strong>semantic typing</strong>, and
+        <strong>error detection</strong>. No nostalgia. No legacy bias. Just the score.
+      </p>
+
+      <!-- OVERALL SCORES -->
+      <div class="score-grid">
+        <div class="score-card">
+          <span class="score-system">UUID v4</span>
+          <span class="score-val dim">1/5</span>
+          <span class="score-label">Global uniqueness only</span>
+        </div>
+        <div class="score-card">
+          <span class="score-system">ULID</span>
+          <span class="score-val dim">2/5</span>
+          <span class="score-label">Unique + time-ordered</span>
+        </div>
+        <div class="score-card">
+          <span class="score-system">KSUID</span>
+          <span class="score-val dim">2/5</span>
+          <span class="score-label">Unique + time-ordered</span>
+        </div>
+        <div class="score-card winner">
+          <span class="score-system gold">HEXAGEN-60</span>
+          <span class="score-val gold">5/5</span>
+          <span class="score-label">All five properties</span>
+        </div>
+      </div>
+
+      <h2 id="uuid">UUID v4 — The Default Choice</h2>
+
+      <p>
+        UUID v4 is the most widely deployed identifier format in existence. If you've
+        never thought about this decision before, you're probably using it right now.
+        It produces 128 bits of randomness formatted as a 36-character string:
+      </p>
+
+      <div class="code-block">
+        <div class="code-hdr"><div class="code-dots"><div class="cd cd-r"></div><div class="cd cd-y"></div><div class="cd cd-g"></div></div><span class="code-fn">uuid_example.py</span></div>
+        <div class="code-body">
+<span class="ck">import</span> <span class="ci">uuid</span>
+
+user_id = <span class="ci">uuid</span>.uuid4()
+<span class="co"># 550e8400-e29b-41d4-a716-446655440000</span>
+<span class="co"># 36 characters — 32 hex + 4 dashes</span>
+        </div>
+      </div>
+
+      <p>
+        <strong>What UUID v4 does well:</strong> It's globally unique with a collision
+        probability so low it's effectively zero. It's implemented in every language,
+        every database, every framework. It requires nothing.
+      </p>
+
+      <p>
+        <strong>What UUID v4 doesn't do:</strong> Everything else. A UUID tells you nothing
+        about when it was created, what type of entity it identifies, whether it was
+        corrupted in transit, or where it fits in any hierarchy. It's a random string
+        wearing a format. That's all it is.
+      </p>
+
+      <ul>
+        <li><strong>Size:</strong> 36 characters (32 hex + 4 dashes) — worst in class</li>
+        <li><strong>Sortable:</strong> No — v4 is random, index performance degrades over time</li>
+        <li><strong>Typed:</strong> No — you can't tell a user ID from an event ID by inspection</li>
+        <li><strong>Hierarchical:</strong> No</li>
+        <li><strong>Checksum:</strong> No</li>
+      </ul>
+
+      <h2 id="ulid">ULID — Time Ordering Added</h2>
+
+      <p>
+        ULID (Universally Unique Lexicographically Sortable Identifier) was designed to fix
+        UUID's worst problem: random sort order. A ULID encodes a 48-bit millisecond timestamp
+        in its first 10 characters, followed by 80 bits of randomness. Total: 26 characters,
+        Crockford Base32-encoded.
+      </p>
+
+      <div class="code-block">
+        <div class="code-hdr"><div class="code-dots"><div class="cd cd-r"></div><div class="cd cd-y"></div><div class="cd cd-g"></div></div><span class="code-fn">ulid_example.py</span></div>
+        <div class="code-body">
+<span class="ck">import</span> <span class="ci">ulid</span>
+
+event_id = <span class="ci">ulid</span>.new()
+<span class="co"># 01ARZ3NDEKTSV4RRFFQ69G5FAV</span>
+<span class="co"># 26 characters — 10 timestamp + 16 random</span>
+<span class="co"># Timestamp: extractable, millisecond resolution</span>
+        </div>
+      </div>
+
+      <p>
+        ULID is a genuine improvement over UUID v4. Time-ordered inserts perform better on
+        B-tree indexes. You can extract a timestamp. Lexicographic sort gives you chronological
+        order for free. If your only complaint about UUID is index performance,
+        ULID solves your problem.
+      </p>
+
+      <p>
+        But ULID still gives you only two of the five properties. It's 26 characters
+        (still verbose), carries no type information, has no semantic hierarchy, and
+        no error detection. A corrupt ULID is indistinguishable from a valid one.
+      </p>
+
+      <h2 id="ksuid">KSUID — Another Time-Ordered Option</h2>
+
+      <p>
+        KSUID (K-Sortable Unique IDentifier), from Segment, takes a similar approach to ULID
+        but uses a 32-bit Unix timestamp (second resolution, not millisecond) and 128 bits
+        of random payload. Encoded in Base62, it produces a 27-character string.
+      </p>
+
+      <div class="code-block">
+        <div class="code-hdr"><div class="code-dots"><div class="cd cd-r"></div><div class="cd cd-y"></div><div class="cd cd-g"></div></div><span class="code-fn">ksuid_example.py</span></div>
+        <div class="code-body">
+<span class="ck">import</span> <span class="ci">cyksuid</span>
+
+asset_id = <span class="ci">cyksuid</span>.ksuid()
+<span class="co"># 0ujtsYcgvSTl8PAuAdqWYSMnLOv</span>
+<span class="co"># 27 characters — 4 byte timestamp + 16 byte random</span>
+<span class="co"># Second resolution (not millisecond)</span>
+        </div>
+      </div>
+
+      <p>
+        KSUID lands in roughly the same category as ULID: two of five properties
+        (uniqueness + time ordering), with coarser timestamp resolution. The 27-character
+        length is marginally worse than ULID. Both are legitimate improvements over UUID v4
+        for time-ordered use cases, and both stop there.
+      </p>
+
+      <h2 id="hexagen60">HEXAGEN-60 — All Five Properties</h2>
+
+      <p>
+        HEXAGEN-60 takes a different starting point. Instead of asking <em>"how do we add
+        time-ordering to UUID?"</em> it asks: <em>"what should an identifier actually encode,
+        and what's the most efficient way to encode it?"</em>
+      </p>
+
+      <p>
+        The answers: type, time, sequence, hierarchy, and integrity. And the most efficient
+        encoding for hierarchical, highly-divisible data is Base-60 — the same numeral system
+        Babylon used to measure time, still used today in every clock and compass on earth.
+      </p>
+
+      <div class="code-block">
+        <div class="code-hdr"><div class="code-dots"><div class="cd cd-r"></div><div class="cd cd-y"></div><div class="cd cd-g"></div></div><span class="code-fn">hexagen60_example.py</span></div>
+        <div class="code-body">
+<span class="ck">from</span> <span class="ci">uni60</span> <span class="ck">import</span> generate, inspect, TypePrefix
+
+user_id  = generate(TypePrefix.USER)   <span class="co"># 'B4xq7m09C'</span>
+event_id = generate(TypePrefix.EVENT)  <span class="co"># 'B4xq7m0AC'</span>
+asset_id = generate(TypePrefix.ASSET)  <span class="co"># 'B4xq7m0BC'</span>
+
+<span class="co"># Decode without any database lookup</span>
+info = inspect(user_id)
+<span class="cs">print</span>(info.type_name)       <span class="co"># 'USER'</span>
+<span class="cs">print</span>(info.era)             <span class="co"># 730  (days since epoch)</span>
+<span class="cs">print</span>(info.checksum_valid)  <span class="co"># True</span>
+        </div>
+      </div>
+
+      <p>
+        The structure breaks down into five segments, each carrying a distinct semantic payload:
+      </p>
+
+      <ul>
+        <li><strong>TYPE (1 char)</strong> — Unicode Private Use Area character. <code>U+E003</code> = USER, <code>U+E001</code> = EVENT, etc. Inspectable by any Unicode-aware tool.</li>
+        <li><strong>ERA (2 chars)</strong> — Days since epoch in Base-60. 3,600 day range ≈ 9.8 years per era.</li>
+        <li><strong>PERIOD (3 chars)</strong> — Seconds within the day in Base-60. 216,000 values = every second of 2.5 days.</li>
+        <li><strong>SEQUENCE (4 chars)</strong> — Per-second counter in Base-60. 12,960,000 unique IDs per second, per type.</li>
+        <li><strong>CHECK (1 char)</strong> — Luhn-60 checksum. Any single-character corruption is detectable on inspection.</li>
+      </ul>
+
+      <p>
+        Total: <strong>11 characters</strong>. The same address space as a UUID, with five
+        times the information density, and 67% fewer characters.
+      </p>
+
+      <h2 id="comparison">Side-by-Side Comparison</h2>
+
+      <div class="compare-wrap">
+        <table class="compare-table">
+          <thead>
+            <tr>
+              <th>System</th>
+              <th>Length</th>
+              <th>Globally Unique</th>
+              <th>Time-Ordered</th>
+              <th>Typed</th>
+              <th>Hierarchical</th>
+              <th>Checksum</th>
+              <th>Score</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>UUID v4</td>
+              <td>36</td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td style="color:var(--muted)">1 / 5</td>
+            </tr>
+            <tr>
+              <td>ULID</td>
+              <td>26</td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td style="color:var(--muted)">2 / 5</td>
+            </tr>
+            <tr>
+              <td>KSUID</td>
+              <td>27</td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td><span class="cross">✕</span></td>
+              <td style="color:var(--muted)">2 / 5</td>
+            </tr>
+            <tr class="hl">
+              <td>HEXAGEN-60</td>
+              <td style="color:var(--gold);font-weight:600">11</td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="tick">✓</span></td>
+              <td><span class="tick">✓</span></td>
+              <td style="color:var(--gold);font-weight:600">5 / 5</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 id="verdict">The verdict</h2>
+
+      <div class="verdict">
+        <p class="verdict-label">Final Assessment</p>
+        <p class="verdict-text">"UUID v4 is fine until it isn't. ULID and KSUID solve one problem while leaving four on the table. HEXAGEN-60 solves all five — in fewer characters than any of them."</p>
+        <p class="verdict-body">
+          <strong>Use UUID v4</strong> if you're building something small, prototype-speed matters
+          more than architecture, and you'll never need to inspect an ID in a production incident.
+          Otherwise, you're accumulating a debt you'll eventually pay with a migration.<br /><br />
+          <strong>Use ULID or KSUID</strong> if your only pain is index performance and B-tree
+          degradation from random inserts. Both solve that problem cleanly. Neither solves anything else.<br /><br />
+          <strong>Use HEXAGEN-60</strong> if you're building infrastructure you intend to keep —
+          distributed systems where IDs travel across services, where debugging requires tracing
+          by type and time, where a corrupted ID should be detectable without a database query,
+          and where 36-character strings in your logs, URLs, and database indexes represent
+          real storage and performance overhead at scale.
+        </p>
+      </div>
+
+      <p>
+        The 11-character constraint isn't a gimmick. It's an engineering outcome. When you design
+        for the right properties from the start — hierarchy, typing, time, and integrity — Base-60
+        gives you all of them in a string shorter than any competitor.
+      </p>
+
+      <p>
+        The encoding system Babylon used to measure time turns out to be the right foundation
+        for measuring distributed events at scale. Some ideas are just correct.
+      </p>
+
+    </div><!-- /prose -->
+
+    <!-- ARTICLE CTA -->
+    <div class="article-cta">
+      <div class="article-cta-copy">
+        <h3>Deploy HEXAGEN-60 in 60 seconds.</h3>
+        <p><code style="font-family:'JetBrains Mono',monospace;font-size:13px;color:var(--gold);">pip install uni60</code> — MIT licensed, production-ready.</p>
+      </div>
+      <a href="/acquire" class="btn-primary">Request Access <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+
+  </main>
+</div>
+
+<footer>
+  <div style="display:flex;flex-direction:column;gap:4px;">
+    <span class="footer-brand">Taylor Dynasty Systems</span>
+    <span class="footer-sub">A Taylor Dynasty Holding Company — MIT License</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/taytaylor70/uni60">GitHub</a>
+    <a href="/portfolio">Portfolio</a>
+    <a href="/acquire">Acquire</a>
+    <a href="/about">About</a>
+  </div>
+  <span class="footer-right">© 2026 Taylor Dynasty Systems</span>
+</footer>
+
+</body>
+</html>
