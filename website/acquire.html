@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Acquire Access — Taylor Dynasty Digital Asset Licensing</title>
+  <meta name="description" content="Three access tiers: open MIT, professional license, or enterprise. Taylor Dynasty products are production-ready infrastructure — request access for your team today." />
+  <meta name="keywords" content="enterprise python library license, software license digital assets, taylor dynasty systems access, hexagen-60 enterprise" />
+  <link rel="canonical" href="https://taylordynasty.com/acquire" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0A0A0A; --dark: #111111; --card: #141414;
+      --border: #222222; --gold: #C9A84C; --gold-dim: #8A6E2F;
+      --cream: #F5F0E8; --muted: #888888;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--cream); font-family: 'Inter', sans-serif; font-weight: 400; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 72px; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; flex-direction: column; gap: 1px; text-decoration: none; }
+    .nav-logo-primary { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: var(--cream); letter-spacing: 0.04em; }
+    .nav-logo-secondary { font-size: 9px; font-weight: 500; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--cream); }
+    .nav-cta { font-size: 12px !important; font-weight: 600 !important; color: var(--gold) !important; border: 1px solid var(--gold-dim); padding: 8px 20px; border-radius: 2px; letter-spacing: 0.08em !important; text-transform: uppercase; transition: background 0.2s, color 0.2s !important; }
+    .nav-cta:hover, .nav-cta.active { background: var(--gold) !important; color: var(--black) !important; }
+
+    /* HERO */
+    .page-hero { padding: 160px 48px 80px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse 50% 60% at 70% 40%, rgba(201,168,76,0.05) 0%, transparent 70%); pointer-events: none; }
+    .eyebrow { font-size: 11px; font-weight: 500; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
+    .eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold-dim); }
+    .page-headline { font-family: 'Playfair Display', serif; font-size: clamp(38px, 5vw, 72px); font-weight: 700; line-height: 1.07; color: var(--cream); max-width: 680px; letter-spacing: -0.02em; margin-bottom: 24px; }
+    .page-headline em { font-style: italic; color: var(--gold); }
+    .page-lede { font-size: clamp(15px, 1.6vw, 18px); font-weight: 300; color: var(--muted); max-width: 500px; line-height: 1.8; }
+
+    /* QUALIFICATION STATEMENT */
+    .qualify-bar { padding: 28px 48px; border-bottom: 1px solid var(--border); background: rgba(201,168,76,0.03); display: flex; align-items: center; gap: 20px; }
+    .qualify-icon { width: 8px; height: 8px; border-radius: 50%; background: var(--gold); flex-shrink: 0; }
+    .qualify-text { font-size: 13px; color: var(--muted); font-style: italic; }
+    .qualify-text strong { color: var(--cream); font-style: normal; font-weight: 500; }
+
+    /* TIERS */
+    .tiers-section { padding: 80px 48px; }
+    .tiers-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2px; background: var(--border); margin-bottom: 80px; }
+
+    .tier-card { background: var(--black); padding: 48px 40px; display: flex; flex-direction: column; gap: 0; transition: background 0.2s; position: relative; }
+    .tier-card:hover { background: var(--card); }
+    .tier-card.featured-tier { background: var(--card); }
+    .featured-badge { position: absolute; top: -1px; left: 40px; right: 40px; height: 2px; background: var(--gold); }
+
+    .tier-tag { font-size: 10px; font-weight: 600; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 20px; }
+    .tier-name { font-family: 'Playfair Display', serif; font-size: 32px; font-weight: 700; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 8px; line-height: 1; }
+    .tier-price { font-size: 13px; color: var(--muted); margin-bottom: 32px; padding-bottom: 32px; border-bottom: 1px solid var(--border); }
+    .tier-price strong { font-family: 'Playfair Display', serif; font-size: 28px; font-weight: 600; color: var(--cream); display: block; margin-bottom: 4px; }
+
+    .tier-includes { list-style: none; display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; flex: 1; }
+    .tier-includes li { display: flex; align-items: flex-start; gap: 12px; font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .tier-includes li::before { content: '✓'; color: #28C840; font-size: 12px; flex-shrink: 0; margin-top: 1px; }
+    .tier-includes li.excluded { opacity: 0.35; }
+    .tier-includes li.excluded::before { content: '—'; color: var(--muted); }
+    .tier-includes li strong { color: var(--cream); font-weight: 500; }
+
+    .tier-cta { margin-top: auto; }
+    .btn-tier-primary { display: flex; align-items: center; justify-content: center; gap: 8px; background: var(--gold); color: var(--black); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 15px 24px; border-radius: 2px; text-decoration: none; width: 100%; transition: background 0.2s; }
+    .btn-tier-primary:hover { background: #DFC06A; }
+    .btn-tier-outline { display: flex; align-items: center; justify-content: center; gap: 8px; border: 1px solid var(--border); color: var(--cream); font-size: 12px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; padding: 14px 24px; border-radius: 2px; text-decoration: none; width: 100%; transition: border-color 0.2s, color 0.2s; }
+    .btn-tier-outline:hover { border-color: var(--gold-dim); color: var(--gold); }
+    .btn-tier-ghost { display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 500; color: var(--muted); letter-spacing: 0.04em; text-decoration: none; width: 100%; padding: 14px; transition: color 0.2s; }
+    .btn-tier-ghost:hover { color: var(--cream); }
+
+    /* REQUEST FORM */
+    .form-section { max-width: 640px; margin: 0 auto; }
+    .form-heading { font-family: 'Playfair Display', serif; font-size: clamp(26px, 3vw, 38px); font-weight: 600; color: var(--cream); letter-spacing: -0.02em; margin-bottom: 12px; }
+    .form-sub { font-size: 14px; color: var(--muted); margin-bottom: 40px; line-height: 1.7; }
+    .form-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 24px; }
+    .form-label { font-size: 11px; font-weight: 600; color: var(--gold); letter-spacing: 0.16em; text-transform: uppercase; }
+    .form-input, .form-select, .form-textarea { background: var(--card); border: 1px solid var(--border); color: var(--cream); font-family: 'Inter', sans-serif; font-size: 14px; padding: 14px 18px; border-radius: 2px; outline: none; transition: border-color 0.2s; width: 100%; }
+    .form-input::placeholder, .form-textarea::placeholder { color: #444; }
+    .form-input:focus, .form-select:focus, .form-textarea:focus { border-color: var(--gold-dim); }
+    .form-select { appearance: none; cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; }
+    .form-select option { background: var(--dark); }
+    .form-textarea { resize: vertical; min-height: 100px; }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .form-submit { display: flex; align-items: center; justify-content: center; gap: 10px; background: var(--gold); color: var(--black); font-size: 13px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 18px 48px; border-radius: 2px; border: none; cursor: pointer; width: 100%; margin-top: 8px; transition: background 0.2s; font-family: 'Inter', sans-serif; }
+    .form-submit:hover { background: #DFC06A; }
+    .form-note { font-size: 11px; color: var(--muted); text-align: center; margin-top: 16px; line-height: 1.6; }
+
+    /* FOOTER */
+    footer { padding: 40px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-brand { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 600; color: var(--cream); }
+    .footer-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-right { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+
+    @media (max-width: 900px) { nav { padding: 0 24px; } .page-hero { padding: 120px 24px 60px; } .qualify-bar { padding: 20px 24px; } .tiers-section { padding: 48px 24px; } .tiers-grid { grid-template-columns: 1fr; } .form-row { grid-template-columns: 1fr; } footer { padding: 32px 24px; } }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-primary">Taylor Dynasty Systems</span>
+    <span class="nav-logo-secondary">A Taylor Dynasty Holding Company</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/portfolio">Portfolio</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/intelligence">Intelligence</a></li>
+    <li><a href="/acquire" class="nav-cta active">Request Access</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <p class="eyebrow">Access &amp; Licensing</p>
+  <h1 class="page-headline">Choose your<br /><em>access tier.</em></h1>
+  <p class="page-lede">
+    Open for anyone. Professional for teams. Enterprise for the infrastructure
+    that can't fail. All three start with the same codebase.
+  </p>
+</section>
+
+<!-- QUALIFICATION -->
+<div class="qualify-bar">
+  <div class="qualify-icon"></div>
+  <p class="qualify-text"><strong>Access is extended to teams building production infrastructure.</strong> Requests for open access are immediate. Professional and Enterprise requests are reviewed within 48 hours.</p>
+</div>
+
+<!-- TIERS -->
+<section class="tiers-section">
+  <div class="tiers-grid">
+
+    <!-- OPEN -->
+    <div class="tier-card">
+      <p class="tier-tag">Tier 01</p>
+      <h2 class="tier-name">Open</h2>
+      <div class="tier-price">
+        <strong>Free</strong>
+        MIT License — no restrictions
+      </div>
+      <ul class="tier-includes">
+        <li><strong>Full source code</strong> — everything on GitHub</li>
+        <li><strong>MIT license</strong> — use in any project, commercial or personal</li>
+        <li><strong>Community docs</strong> — README, protocol spec, examples</li>
+        <li><strong>PyPI package</strong> — <code style="font-family:'JetBrains Mono',monospace;font-size:11px;">pip install uni60</code></li>
+        <li class="excluded">Priority support</li>
+        <li class="excluded">Private channel access</li>
+        <li class="excluded">SLA guarantees</li>
+      </ul>
+      <div class="tier-cta">
+        <a href="https://github.com/taytaylor70/uni60" class="btn-tier-outline">View on GitHub</a>
+        <a href="#" class="btn-tier-ghost">pip install uni60</a>
+      </div>
+    </div>
+
+    <!-- PROFESSIONAL -->
+    <div class="tier-card featured-tier">
+      <div class="featured-badge"></div>
+      <p class="tier-tag">Tier 02 — Most Chosen</p>
+      <h2 class="tier-name">Professional</h2>
+      <div class="tier-price">
+        <strong>Contact for Pricing</strong>
+        Per team · Annual license
+      </div>
+      <ul class="tier-includes">
+        <li><strong>Everything in Open</strong></li>
+        <li><strong>Commercial license</strong> — extended terms, redistribution rights</li>
+        <li><strong>Priority support</strong> — 24-hour response guarantee</li>
+        <li><strong>Private Slack channel</strong> — direct access to the build team</li>
+        <li><strong>Protocol update briefings</strong> — advance notice of changes</li>
+        <li><strong>Named license</strong> — your org on the record</li>
+        <li class="excluded">Custom SLA</li>
+        <li class="excluded">Dedicated account contact</li>
+      </ul>
+      <div class="tier-cta">
+        <a href="#request-form" class="btn-tier-primary">Request Professional <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+    <!-- ENTERPRISE -->
+    <div class="tier-card">
+      <p class="tier-tag">Tier 03</p>
+      <h2 class="tier-name">Enterprise</h2>
+      <div class="tier-price">
+        <strong>Custom</strong>
+        Scoped per deployment
+      </div>
+      <ul class="tier-includes">
+        <li><strong>Everything in Professional</strong></li>
+        <li><strong>Custom SLA</strong> — uptime and response commitments in writing</li>
+        <li><strong>Dedicated account contact</strong> — one point of contact, always</li>
+        <li><strong>Integration support</strong> — we help you ship, not just license</li>
+        <li><strong>Succession continuity</strong> — access guaranteed beyond any individual</li>
+        <li><strong>NDA available</strong> — full confidentiality if required</li>
+        <li><strong>Custom type prefixes</strong> — extend the protocol for your domain</li>
+      </ul>
+      <div class="tier-cta">
+        <a href="#request-form" class="btn-tier-primary">Request Enterprise <svg width="11" height="11" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- REQUEST FORM -->
+  <div class="form-section" id="request-form">
+    <h2 class="form-heading">Request access.</h2>
+    <p class="form-sub">
+      Tell us who you are, what you're building, and which tier fits your team.
+      We'll respond within 48 hours. No sales calls. No automated follow-ups.
+    </p>
+
+    <form action="#" method="POST">
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" for="name">Your Name</label>
+          <input class="form-input" type="text" id="name" name="name" placeholder="Full name" required />
+        </div>
+        <div class="form-group">
+          <label class="form-label" for="email">Email</label>
+          <input class="form-input" type="email" id="email" name="email" placeholder="you@company.com" required />
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="org">Organization</label>
+        <input class="form-input" type="text" id="org" name="org" placeholder="Company or project name" />
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="tier">Access Tier</label>
+        <select class="form-select" id="tier" name="tier" required>
+          <option value="" disabled selected>Select a tier</option>
+          <option value="professional">Professional</option>
+          <option value="enterprise">Enterprise</option>
+          <option value="other">Other — I'll explain below</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="usecase">What are you building?</label>
+        <textarea class="form-textarea" id="usecase" name="usecase" placeholder="Describe your use case — what system, at what scale, and what problem HEXAGEN-60 solves for you." required></textarea>
+      </div>
+      <button type="submit" class="form-submit">
+        Submit Request
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <p class="form-note">Your information is never sold, shared with third parties, or used for any purpose outside this request.</p>
+    </form>
+  </div>
+
+</section>
+
+<footer>
+  <div style="display:flex;flex-direction:column;gap:4px;">
+    <span class="footer-brand">Taylor Dynasty Systems</span>
+    <span class="footer-sub">A Taylor Dynasty Holding Company — MIT License</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/taytaylor70/uni60">GitHub</a>
+    <a href="/intelligence">Intelligence</a>
+    <a href="/portfolio">Portfolio</a>
+    <a href="/about">About</a>
+  </div>
+  <span class="footer-right">© 2026 Taylor Dynasty Systems</span>
+</footer>
+
+</body>
+</html>

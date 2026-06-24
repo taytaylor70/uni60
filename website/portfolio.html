@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Portfolio — Taylor Dynasty Holding Digital Asset Catalog</title>
+  <meta name="description" content="Privately curated digital assets from The Taylor Dynasty Holding. Each product engineered for immediate, professional-grade execution — ready to deploy the moment it's in your hands." />
+  <meta name="keywords" content="hierarchical id generator, base60 encoding library python, distributed systems identifier, digital asset portfolio, taylor dynasty systems" />
+  <link rel="canonical" href="https://taylordynasty.com/portfolio" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --black: #0A0A0A; --dark: #111111; --card: #141414;
+      --border: #222222; --gold: #C9A84C; --gold-dim: #8A6E2F;
+      --cream: #F5F0E8; --muted: #888888;
+    }
+    html { scroll-behavior: smooth; }
+    body { background: var(--black); color: var(--cream); font-family: 'Inter', sans-serif; font-weight: 400; line-height: 1.6; -webkit-font-smoothing: antialiased; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 48px; height: 72px; background: rgba(10,10,10,0.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+    .nav-logo { display: flex; flex-direction: column; gap: 1px; text-decoration: none; }
+    .nav-logo-primary { font-family: 'Playfair Display', serif; font-size: 15px; font-weight: 600; color: var(--cream); letter-spacing: 0.04em; }
+    .nav-logo-secondary { font-size: 9px; font-weight: 500; color: var(--gold); letter-spacing: 0.18em; text-transform: uppercase; }
+    .nav-links { display: flex; align-items: center; gap: 40px; list-style: none; }
+    .nav-links a { font-size: 13px; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; }
+    .nav-links a:hover, .nav-links a.active { color: var(--cream); }
+    .nav-cta { font-size: 12px !important; font-weight: 600 !important; color: var(--gold) !important; border: 1px solid var(--gold-dim); padding: 8px 20px; border-radius: 2px; letter-spacing: 0.08em !important; text-transform: uppercase; transition: background 0.2s, color 0.2s !important; }
+    .nav-cta:hover { background: var(--gold) !important; color: var(--black) !important; }
+
+    /* HERO */
+    .page-hero { padding: 160px 48px 80px; border-bottom: 1px solid var(--border); position: relative; overflow: hidden; }
+    .page-hero::before { content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0; background: radial-gradient(ellipse 60% 60% at 75% 30%, rgba(201,168,76,0.05) 0%, transparent 70%); pointer-events: none; }
+    .eyebrow { font-size: 11px; font-weight: 500; color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; }
+    .eyebrow::before { content: ''; display: block; width: 32px; height: 1px; background: var(--gold-dim); }
+    .page-headline { font-family: 'Playfair Display', serif; font-size: clamp(38px, 5vw, 72px); font-weight: 700; line-height: 1.07; color: var(--cream); max-width: 720px; letter-spacing: -0.02em; margin-bottom: 24px; }
+    .page-headline em { font-style: italic; color: var(--gold); }
+    .page-lede { font-size: clamp(15px, 1.6vw, 18px); font-weight: 300; color: var(--muted); max-width: 520px; line-height: 1.8; }
+
+    /* FILTER STRIP */
+    .filter-strip { padding: 28px 48px; border-bottom: 1px solid var(--border); display: flex; align-items: center; gap: 8px; }
+    .filter-btn { font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 18px; border: 1px solid var(--border); border-radius: 2px; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+    .filter-btn.active, .filter-btn:hover { border-color: var(--gold-dim); color: var(--cream); }
+    .filter-btn.active { background: rgba(201,168,76,0.08); color: var(--gold); border-color: var(--gold-dim); }
+    .filter-count { font-size: 10px; color: var(--muted); margin-left: auto; letter-spacing: 0.06em; }
+
+    /* PRODUCT GRID */
+    .product-grid { padding: 64px 48px 96px; display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; background: var(--border); border-top: 2px solid var(--border); }
+
+    /* PRODUCT CARD */
+    .product-card { background: var(--black); padding: 48px; display: flex; flex-direction: column; gap: 0; position: relative; transition: background 0.2s; }
+    .product-card:hover { background: var(--card); }
+    .product-card.featured { grid-column: 1 / -1; display: grid; grid-template-columns: 1fr 1fr; gap: 64px; align-items: start; }
+
+    .card-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 28px; gap: 16px; }
+    .card-number { font-family: 'Playfair Display', serif; font-size: 11px; color: var(--gold-dim); letter-spacing: 0.12em; }
+    .status-badge { font-size: 9px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; padding: 5px 12px; border-radius: 2px; white-space: nowrap; }
+    .status-live { background: rgba(40,200,64,0.1); color: #28C840; border: 1px solid rgba(40,200,64,0.2); }
+    .status-dev  { background: rgba(201,168,76,0.08); color: var(--gold); border: 1px solid var(--gold-dim); }
+    .status-soon { background: rgba(136,136,136,0.08); color: var(--muted); border: 1px solid var(--border); }
+
+    .card-subsidiary { font-size: 10px; font-weight: 500; color: var(--muted); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 12px; }
+    .card-name { font-family: 'Playfair Display', serif; font-size: clamp(26px, 3vw, 40px); font-weight: 700; color: var(--cream); letter-spacing: -0.02em; line-height: 1.1; margin-bottom: 8px; }
+    .card-codename { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--gold); margin-bottom: 20px; }
+    .card-tagline { font-size: 15px; font-weight: 300; color: var(--muted); line-height: 1.7; margin-bottom: 28px; }
+    .card-tagline strong { color: var(--cream); font-weight: 500; }
+
+    /* SPEC CHIPS */
+    .spec-chips { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 36px; }
+    .chip { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--muted); background: var(--card); border: 1px solid var(--border); padding: 5px 12px; border-radius: 2px; }
+    .chip.highlight { color: var(--gold); border-color: var(--gold-dim); background: rgba(201,168,76,0.05); }
+
+    .card-cta-row { display: flex; align-items: center; gap: 16px; margin-top: auto; padding-top: 36px; border-top: 1px solid var(--border); }
+    .btn-gold { display: inline-flex; align-items: center; gap: 8px; background: var(--gold); color: var(--black); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 13px 28px; border-radius: 2px; text-decoration: none; transition: background 0.2s, transform 0.15s; }
+    .btn-gold:hover { background: #DFC06A; transform: translateY(-1px); }
+    .btn-ghost { font-size: 12px; font-weight: 500; color: var(--muted); text-decoration: none; letter-spacing: 0.04em; transition: color 0.2s; display: flex; align-items: center; gap: 6px; }
+    .btn-ghost:hover { color: var(--cream); }
+
+    /* FEATURED CARD RIGHT SIDE */
+    .card-detail { display: flex; flex-direction: column; gap: 20px; }
+    .card-detail-block { padding: 20px; border: 1px solid var(--border); border-radius: 2px; }
+    .detail-label { font-size: 10px; font-weight: 600; color: var(--gold); letter-spacing: 0.2em; text-transform: uppercase; margin-bottom: 12px; }
+    .detail-row { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px solid rgba(34,34,34,0.5); font-size: 13px; }
+    .detail-row:last-child { border-bottom: none; padding-bottom: 0; }
+    .detail-key { color: var(--muted); }
+    .detail-val { color: var(--cream); font-weight: 500; }
+    .detail-val.gold { color: var(--gold); }
+
+    /* COMING SOON OVERLAY */
+    .card-dim { opacity: 0.65; }
+    .card-dim:hover { opacity: 0.85; }
+
+    /* BOTTOM CTA */
+    .bottom-cta { padding: 80px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 32px; flex-wrap: wrap; }
+    .bottom-cta-copy { display: flex; flex-direction: column; gap: 8px; }
+    .bottom-cta-copy h3 { font-family: 'Playfair Display', serif; font-size: clamp(22px, 2.5vw, 34px); font-weight: 600; color: var(--cream); letter-spacing: -0.02em; }
+    .bottom-cta-copy p { font-size: 14px; color: var(--muted); }
+
+    /* FOOTER */
+    footer { padding: 40px 48px; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 20px; }
+    .footer-brand { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 600; color: var(--cream); }
+    .footer-sub { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; }
+    .footer-links { display: flex; gap: 32px; }
+    .footer-links a { font-size: 12px; color: var(--muted); text-decoration: none; transition: color 0.2s; }
+    .footer-links a:hover { color: var(--cream); }
+    .footer-right { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
+
+    @media (max-width: 1000px) { .product-card.featured { grid-column: 1; grid-template-columns: 1fr; } }
+    @media (max-width: 860px) { nav { padding: 0 24px; } .page-hero { padding: 120px 24px 60px; } .filter-strip { padding: 20px 24px; } .product-grid { padding: 0; grid-template-columns: 1fr; } .product-card { padding: 36px 24px; } .product-card.featured { grid-column: 1; grid-template-columns: 1fr; } .bottom-cta { padding: 60px 24px; } footer { padding: 32px 24px; } }
+    @media (max-width: 640px) { .nav-links { display: none; } }
+  </style>
+</head>
+<body>
+
+<nav>
+  <a href="/" class="nav-logo">
+    <span class="nav-logo-primary">Taylor Dynasty Systems</span>
+    <span class="nav-logo-secondary">A Taylor Dynasty Holding Company</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="/portfolio" class="active">Portfolio</a></li>
+    <li><a href="/about">About</a></li>
+    <li><a href="/intelligence">Intelligence</a></li>
+    <li><a href="/acquire" class="nav-cta">Request Access</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section class="page-hero">
+  <p class="eyebrow">Privately Curated Digital Assets</p>
+  <h1 class="page-headline">Not a catalog.<br /><em>A collection.</em></h1>
+  <p class="page-lede">
+    Every Taylor Dynasty asset is engineered for immediate, professional-grade
+    execution. No demos. No roadmaps. Ready to deploy the moment it's in your hands.
+  </p>
+</section>
+
+<!-- FILTER -->
+<div class="filter-strip">
+  <button class="filter-btn active">All Assets</button>
+  <button class="filter-btn">Live</button>
+  <button class="filter-btn">In Development</button>
+  <span class="filter-count">4 assets — 1 live, 3 in development</span>
+</div>
+
+<!-- GRID -->
+<div class="product-grid">
+
+  <!-- CARD 1: HEXAGEN-60 (FEATURED / LIVE) -->
+  <article class="product-card featured">
+    <div>
+      <div class="card-header">
+        <span class="card-number">Asset 001</span>
+        <span class="status-badge status-live">Live — v1.0.0</span>
+      </div>
+      <p class="card-subsidiary">Taylor Dynasty Systems</p>
+      <h2 class="card-name">HEXAGEN-60</h2>
+      <p class="card-codename">uni60 · MIT Licensed · Python 3.9+</p>
+      <p class="card-tagline">
+        <strong>The ID system your infrastructure deserves.</strong>
+        Hierarchical, typed, time-ordered, self-validating — in an
+        11-character string. The encoding system Babylon used to
+        measure time, rebuilt for modern distributed architecture.
+      </p>
+      <div class="spec-chips">
+        <span class="chip highlight">11 chars</span>
+        <span class="chip highlight">67% smaller than UUID</span>
+        <span class="chip">Hierarchical</span>
+        <span class="chip">Typed</span>
+        <span class="chip">Time-ordered</span>
+        <span class="chip">Luhn-60 checksum</span>
+        <span class="chip">12.96M IDs/sec</span>
+        <span class="chip">Thread-safe</span>
+      </div>
+      <div class="card-cta-row">
+        <a href="/acquire" class="btn-gold">Acquire Access <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+        <a href="/intelligence" class="btn-ghost">Read the Protocol <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+      </div>
+    </div>
+    <div class="card-detail">
+      <div class="card-detail-block">
+        <p class="detail-label">Protocol Specs</p>
+        <div class="detail-row"><span class="detail-key">Encoding base</span><span class="detail-val gold">Base-60 (sexagesimal)</span></div>
+        <div class="detail-row"><span class="detail-key">Total length</span><span class="detail-val">11 characters</span></div>
+        <div class="detail-row"><span class="detail-key">Type prefixes</span><span class="detail-val">9 built-in + CUSTOM</span></div>
+        <div class="detail-row"><span class="detail-key">Capacity per type</span><span class="detail-val">~4.6 × 10¹⁶ IDs</span></div>
+        <div class="detail-row"><span class="detail-key">Throughput</span><span class="detail-val">12.96M / second</span></div>
+        <div class="detail-row"><span class="detail-key">Checksum</span><span class="detail-val">Luhn-60 algorithm</span></div>
+        <div class="detail-row"><span class="detail-key">URL-safe mode</span><span class="detail-val">✓</span></div>
+        <div class="detail-row"><span class="detail-key">License</span><span class="detail-val gold">MIT</span></div>
+      </div>
+      <div class="card-detail-block">
+        <p class="detail-label">Quick Deploy</p>
+        <div style="font-family:'JetBrains Mono',monospace;font-size:13px;line-height:1.8;color:#888;">
+          <span style="color:var(--gold)">$</span> pip install uni60<br/>
+          <br/>
+          <span style="color:#82AAFF">from</span> <span style="color:#C3E88D">uni60</span> <span style="color:#82AAFF">import</span> generate, TypePrefix<br/>
+          user_id = generate(TypePrefix.USER)<br/>
+          <span style="color:var(--gold)"># 'B4xq7m09C'</span>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  <!-- CARD 2: The Taylor Edition -->
+  <article class="product-card card-dim">
+    <div class="card-header">
+      <span class="card-number">Asset 002</span>
+      <span class="status-badge status-dev">In Development</span>
+    </div>
+    <p class="card-subsidiary">Taylor Dynasty Holdings</p>
+    <h2 class="card-name">The Taylor Edition</h2>
+    <p class="card-codename">AI Execution Assistant</p>
+    <p class="card-tagline">
+      <strong>Intelligence at the edge of execution.</strong>
+      An AI-powered assistant built into the Taylor Dynasty ecosystem —
+      designed for operators who don't have time to babysit tools.
+    </p>
+    <div class="spec-chips">
+      <span class="chip">AI-Powered</span>
+      <span class="chip">Ecosystem-Native</span>
+      <span class="chip">Private Access</span>
+    </div>
+    <div class="card-cta-row">
+      <a href="/acquire" class="btn-gold" style="opacity:0.5;pointer-events:none;">Coming Soon</a>
+      <a href="/acquire" class="btn-ghost">Join the Waitlist <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </article>
+
+  <!-- CARD 3: Oasis Marketplace -->
+  <article class="product-card card-dim">
+    <div class="card-header">
+      <span class="card-number">Asset 003</span>
+      <span class="status-badge status-dev">In Development</span>
+    </div>
+    <p class="card-subsidiary">TheOasisMarketplace LLC</p>
+    <h2 class="card-name">Oasis Marketplace</h2>
+    <p class="card-codename">Curated Digital Goods Platform</p>
+    <p class="card-tagline">
+      <strong>A marketplace built for serious operators.</strong>
+      Curated digital products, tools, and assets for builders,
+      founders, and professionals who know the difference between
+      software and infrastructure.
+    </p>
+    <div class="spec-chips">
+      <span class="chip">Curated</span>
+      <span class="chip">Digital Goods</span>
+      <span class="chip">Trust-Owned</span>
+    </div>
+    <div class="card-cta-row">
+      <a href="/acquire" class="btn-gold" style="opacity:0.5;pointer-events:none;">Coming Soon</a>
+      <a href="/acquire" class="btn-ghost">Join the Waitlist <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </article>
+
+  <!-- CARD 4: AURUM -->
+  <article class="product-card card-dim">
+    <div class="card-header">
+      <span class="card-number">Asset 004</span>
+      <span class="status-badge status-dev">In Development</span>
+    </div>
+    <p class="card-subsidiary">Taylor Dynasty Holdings</p>
+    <h2 class="card-name">AURUM</h2>
+    <p class="card-codename">Strategic Execution Engine</p>
+    <p class="card-tagline">
+      <strong>Strategic execution, systematized.</strong>
+      The operating engine at the center of the Taylor Dynasty system —
+      built to turn vision into action across every subsidiary, every
+      initiative, every day.
+    </p>
+    <div class="spec-chips">
+      <span class="chip">Execution-Focused</span>
+      <span class="chip">Multi-Entity</span>
+      <span class="chip">Private</span>
+    </div>
+    <div class="card-cta-row">
+      <a href="/acquire" class="btn-gold" style="opacity:0.5;pointer-events:none;">Coming Soon</a>
+      <a href="/acquire" class="btn-ghost">Join the Waitlist <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+    </div>
+  </article>
+
+</div>
+
+<!-- BOTTOM CTA -->
+<div class="bottom-cta">
+  <div class="bottom-cta-copy">
+    <h3>Ready to deploy the first asset?</h3>
+    <p>HEXAGEN-60 is live now. MIT licensed and production-ready.</p>
+  </div>
+  <a href="/acquire" class="btn-gold">Request Access <svg width="12" height="12" viewBox="0 0 14 14" fill="none"><path d="M3 7h8M8 4l3 3-3 3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></a>
+</div>
+
+<footer>
+  <div style="display:flex;flex-direction:column;gap:4px;">
+    <span class="footer-brand">Taylor Dynasty Systems</span>
+    <span class="footer-sub">A Taylor Dynasty Holding Company — MIT License</span>
+  </div>
+  <div class="footer-links">
+    <a href="https://github.com/taytaylor70/uni60">GitHub</a>
+    <a href="/intelligence">Intelligence</a>
+    <a href="/acquire">Acquire</a>
+    <a href="/about">About</a>
+  </div>
+  <span class="footer-right">© 2026 Taylor Dynasty Systems</span>
+</footer>
+
+</body>
+</html>
